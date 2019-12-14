@@ -1,4 +1,4 @@
-package project.websocket.echo;
+package project.websocket.controller;
 
 import java.util.HashSet;
 
@@ -13,9 +13,7 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import project.websocket.dao.ConnectionRepository;
 
-public class EchoWebSocketHandler extends AbstractWebSocketHandler {
-
-	private static Logger logger = LoggerFactory.getLogger(EchoWebSocketHandler.class);
+public class WeShareHandler extends AbstractWebSocketHandler {
 
 	@Autowired
 	ConnectionRepository connections;
@@ -23,18 +21,19 @@ public class EchoWebSocketHandler extends AbstractWebSocketHandler {
 	HashSet<WebSocketSession> sessions;
 
 	@Autowired
-	public EchoWebSocketHandler() {
+	public WeShareHandler() {
 		sessions = new HashSet<WebSocketSession>();
 	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
-		logger.debug("Opened new session in instance " + this);
+		System.out.println("ADD CONNECTION");
 		sessions.add(session);
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		System.out.println("REMOVE CONNECTION " + status);
 		sessions.remove(session);
 	}
 
@@ -44,7 +43,10 @@ public class EchoWebSocketHandler extends AbstractWebSocketHandler {
 		
 		byte[] echoMessage = message.getPayload().array();
 
+		System.out.println("CONNECTION NUMBER: " + sessions.size());
+
 		for (WebSocketSession webSocketSession : sessions) {
+			System.out.println("SEND MESSAGE");
 			webSocketSession.sendMessage(new BinaryMessage(echoMessage));
 		}
 
@@ -52,8 +54,10 @@ public class EchoWebSocketHandler extends AbstractWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		System.out.println("CONNECTION NUMBER: " + sessions.size());
 		
 		for (WebSocketSession webSocketSession : sessions) {
+			System.out.println("SEND MESSAGE");
 			webSocketSession.sendMessage( new TextMessage(message.getPayload()));
 		}
 		

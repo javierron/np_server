@@ -1,4 +1,4 @@
-package project.websocket.echo;
+package project.websocket.controller;
 
 import com.google.maps.model.LatLng;
 import java.io.Serializable;

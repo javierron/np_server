@@ -10,7 +10,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import project.websocket.echo.EchoWebSocketHandler;
+import project.websocket.controller.WeShareHandler;
 
 @SpringBootApplication
 @EnableWebSocket
@@ -22,7 +22,7 @@ public class SampleWebSocketsApplication extends SpringBootServletInitializer im
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(echoWebSocketHandler(), "/echo");
+		registry.addHandler(echoWebSocketHandler(), "/echo").setAllowedOrigins("*");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SampleWebSocketsApplication extends SpringBootServletInitializer im
 
 	@Bean
 	public WebSocketHandler echoWebSocketHandler() {
-		return new EchoWebSocketHandler();
+		return new WeShareHandler();
 	}
 
 }
