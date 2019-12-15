@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import project.websocket.dto.ConnectionDTO;
-import java.sql.Time;
 
 
 @Entity
@@ -21,9 +20,9 @@ public class Connection implements ConnectionDTO {
 
     @NotNull(message="{connection.time}")
     @Column(name = "CONN_TIME")
-    private Time conn_time;
+    private String conn_time;
 
-    public Connection(Time time) {
+    public Connection(String time) {
         this.conn_time = time;
     }
 
@@ -41,22 +40,11 @@ public class Connection implements ConnectionDTO {
         this.id = id;
     }
     
-    public Time getConn_time() {
+    public String getConn_time() {
         return conn_time;
     }
 
-    public void setConn_time(Time conn_time) {
+    public void setConn_time(String conn_time) {
         this.conn_time = conn_time;
     }
-
-
-
-
-
-
-
-
-
-
-
 }

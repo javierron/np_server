@@ -3,10 +3,8 @@ package project.websocket.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import project.websocket.controller.Message;
 import project.websocket.dto.MetadataDTO;
-
-import java.sql.Time;
-
 
 @Entity
 @Table(name = "METADATA")
@@ -22,10 +20,21 @@ public class Metadata implements MetadataDTO {
 
     @NotNull(message="{metadata.time}")
     @Column(name = "MSG_TIME")
-    private Time msg_time;
+    private String msgTime;
 
-    public Metadata(Time time) {
-        this.msg_time = time;
+    private double latitude;
+    private double longitude;
+
+    private String username;
+    private String message;
+
+
+    public Metadata(Message msg) {
+        this.username = msg.getUsername();
+        this.message = msg.getMsg();
+        this.latitude = msg.getLocation().getLatitude();
+        this.longitude = msg.getLocation().getLongitude();
+        this.msgTime = msg.getDate();
     }
 
     //required by JPA, should not used
@@ -42,13 +51,47 @@ public class Metadata implements MetadataDTO {
         this.id = id;
     }
     
-    public Time getMsg_time() {
-        return msg_time;
+    public String getMsgTime() {
+        return msgTime;
     }
 
-    public void setConn_time(Time msg_time) {
-        this.msg_time = msg_time;
+    public double getLatitude() {
+        return latitude;
     }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMsgTime(String msgTime) {
+        this.msgTime = msgTime;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
 
 
 

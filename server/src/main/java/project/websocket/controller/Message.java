@@ -1,24 +1,43 @@
 package project.websocket.controller;
 
-import com.google.maps.model.LatLng;
 import java.io.Serializable;
-import java.util.Date;
+
+import project.websocket.model.Metadata;
 
 public class Message implements Serializable {
     
+    public class LatLng implements Serializable{
+        private static final long serialVersionUID = 1L;
+        double latitude;
+        double longitude;
+
+        public LatLng(double latitude, double longitude){
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+    }
+
     private static final long serialVersionUID = 1L;
     private String username;
     private String msg;
     private LatLng location;
 
 
-    private Date date;
+    private String date;
 
-    public Message(String username, String msg, LatLng location, Date date) {
-        this.username = username;
-        this.msg = msg;
-        this.location = location;
-        this.date = date;
+    public Message(Metadata metadata) {
+        this.username = metadata.getUsername();
+        this.msg = metadata.getMessage();
+        this.location = new LatLng(metadata.getLatitude(), metadata.getLongitude());
+        this.date = metadata.getMsgTime();
     }
 
     public Message() {
@@ -26,11 +45,11 @@ public class Message implements Serializable {
     }
 
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
