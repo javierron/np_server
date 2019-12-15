@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+</head>
+<body>
+<div>Welcome to Admin Page</div>
+<hr/>
+<section>
+
+    <table border="1" id="stuTable">
+        <tr>
+            <td>Total number of messages</td>
+            <td>Number of connections</td>
+            <td>Number of current connections</td>
+        </tr>
+            <td th:text="${all_msg}" id="data1">编号11</td>
+            <td th:text="${all_con}" id="data2">姓名11</td>
+            <td th:text="${current_con}" id="data3">姓名11</td>
+        </tr>
+    </table>
+
+    <br>
+    </section>
+
+
+</body>
+
+<script type = "text/javascript">
+    function WebSocketTest() {
+       
+       if ("WebSocket" in window) {
+          var ws = new WebSocket("ws://localhost:8080/adminws");
+                          
+          ws.onmessage = function (evt) { 
+             var received_msg = evt.data;
+
+             var data = JSON.parse(received_msg);
+
+             document.getElementById("data1").innerHTML = data.messages;
+             document.getElementById("data2").innerHTML = data.connections;
+             document.getElementById("data3").innerHTML = data.currentConnections;
+          };
+           
+       } else {
+          alert("WebSocket NOT supported by your Browser!");
+       }
+    }
+
+    WebSocketTest();
+ </script>
+</html>

@@ -24,13 +24,26 @@ import project.websocket.model.Metadata;
 
 public class WeShareHandler extends AbstractWebSocketHandler {
 
+	public class AdminInfo {
+
+		int messages;
+		int connections;
+		int currentConnections;
+
+		public AdminInfo(int messages, int connections, int currentConnections){
+			this.messages = messages;
+			this.connections = connections;
+			this.currentConnections = currentConnections;
+		}
+	}
+
 	@Autowired
 	ConnectionRepository connections;
 
 	@Autowired
 	MetadataRepository metadataRepo;
 
-	HashSet<WebSocketSession> sessions;
+	public static HashSet<WebSocketSession> sessions;
 
 	final String dateFormat = "EEE, yyyy-MM-dd HH:mm:ss";
 
@@ -60,12 +73,15 @@ public class WeShareHandler extends AbstractWebSocketHandler {
 			Message m = new Message(metadata);
 			session.sendMessage(new TextMessage( gson.toJson(m)));
 		}
+
+		updateAdmin();
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		System.out.println("REMOVE CONNECTION " + status);
 		sessions.remove(session);
+		updateAdmin();
 	}
 
 	@Override
@@ -99,12 +115,29 @@ public class WeShareHandler extends AbstractWebSocketHandler {
 			webSocketSession.sendMessage( new TextMessage(message.getPayload()));
 		}
 		
+		updateAdmin();
 	}
 
 	@Override
 	public void handleTransportError(WebSocketSession session, Throwable exception)
 			throws Exception {
 		session.close(CloseStatus.SERVER_ERROR);
+	}
+
+	void updateAdmin() throws Exception {
+
+		int all = (int)metadataRepo.count();
+        int all_con = (int)connections.count();
+        int current_connections = WeShareHandler.sessions.size();
+
+		AdminInfo data = new AdminInfo(all, all_con, current_connections);
+
+		Gson gson = new GsonBuilder().create();
+		String info = gson.toJson(data);
+
+		for (WebSocketSession webSocketSession : AdminHandler.sessions) {
+			webSocketSession.sendMessage(new TextMessage(info));
+		}
 	}
 
 }

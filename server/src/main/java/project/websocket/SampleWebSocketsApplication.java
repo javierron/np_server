@@ -10,6 +10,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import project.websocket.controller.AdminHandler;
 import project.websocket.controller.WeShareHandler;
 
 @SpringBootApplication
@@ -20,9 +21,11 @@ public class SampleWebSocketsApplication extends SpringBootServletInitializer im
 	// @Autowired
 	// DataSource dataSource;
 
+
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(echoWebSocketHandler(), "/echo").setAllowedOrigins("*");
+		registry.addHandler(adminHandler(), "/adminws").setAllowedOrigins("*");
 	}
 
 	@Override
@@ -37,6 +40,11 @@ public class SampleWebSocketsApplication extends SpringBootServletInitializer im
 	@Bean
 	public WebSocketHandler echoWebSocketHandler() {
 		return new WeShareHandler();
+	}
+
+	@Bean
+	public AdminHandler adminHandler() {
+		return new AdminHandler();
 	}
 
 }
