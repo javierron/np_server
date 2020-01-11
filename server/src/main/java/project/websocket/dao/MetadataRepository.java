@@ -13,5 +13,5 @@ import project.websocket.model.Metadata;
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface MetadataRepository extends JpaRepository<Metadata,Long> {
-    List<Metadata> findFirst10ByOrderByMsgTimeDesc();
+    List<Metadata> findFirst10OrderByMsgTimeDesc();
 }

@@ -65,7 +65,7 @@ public class WeShareHandler extends AbstractWebSocketHandler {
 		Connection conn = new Connection(currentTime);
 		connections.saveAndFlush(conn);
 
-		List<Metadata> lastMessages = metadataRepo.findFirst10ByOrderByMsgTimeDesc();
+		List<Metadata> lastMessages = metadataRepo.findFirst10OrderByMsgTimeDesc();
 
 		Gson gson = new GsonBuilder().setDateFormat(dateFormat).create();
 
